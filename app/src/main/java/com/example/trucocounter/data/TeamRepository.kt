@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.trucocounter.data.local.TeamDao
 import com.example.trucocounter.data.local.TeamEntity
 import com.example.trucocounter.data.remote.ApiService
+import com.example.trucocounter.data.remote.CreateTeamRequest
 import com.example.trucocounter.data.remote.TeamDto
 
 class TeamRepository(
@@ -21,7 +22,8 @@ class TeamRepository(
 
     // POST - crea un equipo en la API y lo persiste localmente
     suspend fun createTeam(nombre: String, puntos: Int): Result<TeamEntity> = runCatching {
-        val created = apiService.createEquipo(TeamDto(nombre = nombre, puntos = puntos))
+        val request = CreateTeamRequest(nombre = nombre, puntos = puntos)
+        val created = apiService.createEquipo(request)
         val entity = created.toEntity()
         teamDao.insertTeam(entity)
         entity

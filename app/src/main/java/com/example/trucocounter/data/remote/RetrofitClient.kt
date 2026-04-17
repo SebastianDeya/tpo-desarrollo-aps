@@ -7,13 +7,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    // PASO 1: Ir a https://mockapi.io y crear un proyecto
-    // PASO 2: Crear el recurso "equipos" con campos: nombre (String), puntos (Number)
-    // PASO 3: Reemplazar YOUR_PROJECT_ID con el ID que aparece en la URL de tu proyecto
-    // Ejemplo: si tu URL es https://6612abc123.mockapi.io → BASE_URL = "https://6612abc123.mockapi.io/api/v1/"
-    private const val BASE_URL = "https://YOUR_PROJECT_ID.mockapi.io/api/v1/"
+    private const val BASE_URL = "https://69e23459b1cb62b9f317ea14.mockapi.io/"
 
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+    private val loggingInterceptor = HttpLoggingInterceptor { message ->
+        android.util.Log.d("OkHttp", message)
+    }.apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 

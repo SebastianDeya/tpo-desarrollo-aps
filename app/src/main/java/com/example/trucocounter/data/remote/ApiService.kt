@@ -4,15 +4,15 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    @GET("equipos")
+    @GET("Equipos")
     suspend fun getEquipos(): List<TeamDto>
 
-    @POST("equipos")
-    suspend fun createEquipo(@Body equipo: TeamDto): TeamDto
+    @POST("Equipos")
+    suspend fun createEquipo(@Body equipo: CreateTeamRequest): TeamDto
 
-    @PUT("equipos/{id}")
+    @PUT("Equipos/{id}")
     suspend fun updateEquipo(@Path("id") id: String, @Body equipo: TeamDto): TeamDto
 
-    @DELETE("equipos/{id}")
+    @DELETE("Equipos/{id}")
     suspend fun deleteEquipo(@Path("id") id: String): TeamDto
 }
