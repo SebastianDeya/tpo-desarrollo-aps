@@ -9,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.trucocounter.R
 import com.example.trucocounter.data.TeamRepository
-import com.example.trucocounter.data.local.AppDatabase
-import com.example.trucocounter.data.local.TeamEntity
 import com.example.trucocounter.data.remote.RetrofitClient
+import com.example.trucocounter.data.remote.TeamDto
 import com.example.trucocounter.databinding.FragmentTrucoBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -22,10 +21,7 @@ class TrucoFragment : Fragment() {
 
     private val viewModel: TrucoViewModel by viewModels {
         TrucoViewModel.Factory(
-            TeamRepository(
-                AppDatabase.getDatabase(requireContext()).teamDao(),
-                RetrofitClient.apiService
-            )
+            TeamRepository(RetrofitClient.apiService)
         )
     }
 
@@ -70,7 +66,7 @@ class TrucoFragment : Fragment() {
         }
     }
 
-    private fun showTeamDialog(existingTeam: TeamEntity?) {
+    private fun showTeamDialog(existingTeam: TeamDto?) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_team, null)
         val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
         val etPuntos = dialogView.findViewById<EditText>(R.id.etPuntos)
@@ -102,7 +98,7 @@ class TrucoFragment : Fragment() {
             .show()
     }
 
-    private fun confirmDelete(team: TeamEntity) {
+    private fun confirmDelete(team: TeamDto) {
         AlertDialog.Builder(requireContext())
             .setTitle("Eliminar equipo")
             .setMessage("¿Seguro que querés eliminar a ${team.nombre}?")

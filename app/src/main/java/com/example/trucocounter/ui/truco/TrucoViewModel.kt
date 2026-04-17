@@ -2,12 +2,12 @@ package com.example.trucocounter.ui.truco
 
 import androidx.lifecycle.*
 import com.example.trucocounter.data.TeamRepository
-import com.example.trucocounter.data.local.TeamEntity
+import com.example.trucocounter.data.remote.TeamDto
 import kotlinx.coroutines.launch
 
 class TrucoViewModel(private val repository: TeamRepository) : ViewModel() {
 
-    val teams: LiveData<List<TeamEntity>> = repository.localTeams
+    val teams: LiveData<List<TeamDto>> = repository.localTeams
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -15,7 +15,7 @@ class TrucoViewModel(private val repository: TeamRepository) : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    // GET - descarga equipos desde MockAPI y los guarda localmente
+    // GET - descarga equipos desde MockAPI y los guarda en memoria
     fun syncTeams() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -36,7 +36,7 @@ class TrucoViewModel(private val repository: TeamRepository) : ViewModel() {
     }
 
     // PUT - actualiza los puntos de un equipo
-    fun updateTeam(team: TeamEntity) {
+    fun updateTeam(team: TeamDto) {
         viewModelScope.launch {
             _isLoading.value = true
             repository.updateTeam(team)
@@ -46,7 +46,7 @@ class TrucoViewModel(private val repository: TeamRepository) : ViewModel() {
     }
 
     // DELETE - elimina un equipo
-    fun deleteTeam(team: TeamEntity) {
+    fun deleteTeam(team: TeamDto) {
         viewModelScope.launch {
             _isLoading.value = true
             repository.deleteTeam(team)
