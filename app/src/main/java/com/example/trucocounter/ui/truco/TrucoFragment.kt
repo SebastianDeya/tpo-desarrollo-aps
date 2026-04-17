@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.trucocounter.R
 import com.example.trucocounter.data.TeamRepository
 import com.example.trucocounter.data.remote.RetrofitClient
@@ -64,6 +65,18 @@ class TrucoFragment : Fragment() {
                 viewModel.clearError()
             }
         }
+
+        findNavController().currentBackStackEntry?.savedStateHandle
+            ?.getLiveData<String>("pending_action")
+            ?.observe(viewLifecycleOwner) { action ->
+                findNavController().currentBackStackEntry?.savedStateHandle
+                    ?.remove<String>("pending_action")
+                when (action) {
+                    "create_group" -> showTeamDialog(null)
+                    "start_game" -> confirmStartGame()
+                    "sync" -> viewModel.syncTeams()
+                }
+            }
     }
 
     private fun showTeamDialog(existingTeam: TeamDto?) {
@@ -103,6 +116,15 @@ class TrucoFragment : Fragment() {
             .setTitle("Eliminar equipo")
             .setMessage("¿Seguro que querés eliminar a ${team.nombre}?")
             .setPositiveButton("Eliminar") { _, _ -> viewModel.deleteTeam(team) }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun confirmStartGame() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Empezar Partida")
+            .setMessage("¿Reiniciar los puntos de todos los equipos a 0?")
+            .setPositiveButton("Empezar") { _, _ -> viewModel.resetAllScores() }
             .setNegativeButton("Cancelar", null)
             .show()
     }

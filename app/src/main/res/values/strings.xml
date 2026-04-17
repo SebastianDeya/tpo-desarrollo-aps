@@ -8,4 +8,10 @@
     <string name="add_team">Agregar equipo</string>
     <string name="team_name">Nombre del equipo</string>
     <string name="points">Puntos iniciales</string>
+    <string name="drawer_home">Inicio</string>
+    <string name="drawer_create_group">Crear Grupo</string>
+    <string name="drawer_start_game">Empezar Partida</string>
+    <string name="drawer_sync">Sincronizar</string>
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
 </resources>

@@ -9,9 +9,5 @@
         android:name="com.example.trucocounter.ui.truco.TrucoFragment"
         android:label="@string/menu_truco" />
 
-    <fragment
-        android:id="@+id/nav_acerca_de"
-        android:name="com.example.trucocounter.ui.acercade.AcercaDeFragment"
-        android:label="@string/menu_acerca_de" />
 
 </navigation>

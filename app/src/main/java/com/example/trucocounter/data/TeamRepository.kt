@@ -59,4 +59,9 @@ class TeamRepository(
     fun clearCache() {
         _teams.postValue(emptyList())
     }
+
+    fun resetAllScores() {
+        val reset = _teams.value.orEmpty().map { it.copy(puntos = 0) }
+        _teams.postValue(reset)
+    }
 }

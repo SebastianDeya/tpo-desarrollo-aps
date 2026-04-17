@@ -55,6 +55,10 @@ class TrucoViewModel(private val repository: TeamRepository) : ViewModel() {
         }
     }
 
+    fun resetAllScores() {
+        repository.resetAllScores()
+    }
+
     fun clearError() {
         _error.value = null
     }
