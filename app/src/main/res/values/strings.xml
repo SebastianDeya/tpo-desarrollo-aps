@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Truco Counter</string>
+    <string name="menu_truco">Truco</string>
+    <string name="menu_acerca_de">Acerca De</string>
+    <string name="sync">Sincronizar</string>
+    <string name="no_teams">No hay equipos. ¡Agregá uno con el botón +!</string>
+    <string name="add_team">Agregar equipo</string>
+    <string name="team_name">Nombre del equipo</string>
+    <string name="points">Puntos iniciales</string>
+</resources>

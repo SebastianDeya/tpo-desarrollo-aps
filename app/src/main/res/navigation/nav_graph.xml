@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_truco">
+
+    <fragment
+        android:id="@+id/nav_truco"
+        android:name="com.example.trucocounter.ui.truco.TrucoFragment"
+        android:label="@string/menu_truco" />
+
+    <fragment
+        android:id="@+id/nav_acerca_de"
+        android:name="com.example.trucocounter.ui.acercade.AcercaDeFragment"
+        android:label="@string/menu_acerca_de" />
+
+</navigation>

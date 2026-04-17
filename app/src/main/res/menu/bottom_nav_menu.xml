@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_truco"
+        android:title="@string/menu_truco"
+        android:icon="@drawable/ic_cards" />
+
+    <item
+        android:id="@+id/nav_acerca_de"
+        android:title="@string/menu_acerca_de"
+        android:icon="@drawable/ic_info" />
+
+</menu>
