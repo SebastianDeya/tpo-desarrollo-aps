@@ -182,7 +182,7 @@ private fun HomeScreen() {
 }
 
 @Composable
-private fun PantallaEquipos(modifier: Modifier = Modifier) {
+private fun PantallaEquipos() {
     val viewModel: TrucoViewModel = viewModel(
         factory = TrucoViewModel.Factory(TeamRepository(RetrofitClient.apiService))
     )
@@ -204,7 +204,7 @@ private fun PantallaEquipos(modifier: Modifier = Modifier) {
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = { showCreateDialog = true }) {
@@ -222,7 +222,6 @@ private fun PantallaEquipos(modifier: Modifier = Modifier) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = { viewModel.syncTeams() }) {
                     Icon(Icons.Default.Sync, contentDescription = null)
-                    Spacer(Modifier.size(8.dp))
                     Text("Conectar backend")
                 }
                 Button(onClick = { showResetDialog = true }) {
@@ -409,8 +408,21 @@ private fun PantallaAcercaDe() {
             legajo = "1147795",
             photoResId = R.drawable.nicolas
         ),
-        Member(name = "Integrante pendiente", legajo = "-"),
-        Member(name = "Integrante pendiente", legajo = "-")
+        Member(
+            name = "Ignacio Sanchez Zinny",
+            legajo = "1167840",
+            photoResId = R.drawable.ignacio_sanchez_zinny
+        ),
+        Member(
+            name = "Ignacio Bergallo",
+            legajo = "1173481",
+            photoResId = R.drawable.ignacio_bergallo
+        ),
+        Member(
+            name = "Francisco Garriga",
+            legajo = "1168942",
+            photoResId = R.drawable.francisco_garriga
+        )
     )
 
     LazyColumn(
