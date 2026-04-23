@@ -28,14 +28,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -43,13 +42,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -72,7 +69,6 @@ import com.example.trucocounter.data.TeamRepository
 import com.example.trucocounter.data.remote.RetrofitClient
 import com.example.trucocounter.data.remote.TeamDto
 import com.example.trucocounter.ui.truco.TrucoViewModel
-import kotlinx.coroutines.launch
 
 private object Routes {
     const val HOME = "home"
@@ -96,8 +92,7 @@ private data class Member(
 @Composable
 fun TrucoCounterApp() {
     val navController = rememberNavController()
-    val drawerState = rememberDrawerState(initialValue = androidx.compose.material3.DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+    var expanded by remember { mutableStateOf(false) }
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStack?.destination?.route
 
@@ -109,51 +104,42 @@ fun TrucoCounterApp() {
 
     val currentTitle = drawerItems.firstOrNull { it.route == currentRoute }?.label ?: "Truco Counter"
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Truco Counter",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-                drawerItems.forEach { item ->
-                    NavigationDrawerItem(
-                        label = { Text(item.label) },
-                        selected = currentRoute == item.route,
-                        icon = { Icon(item.icon, contentDescription = null) },
-                        onClick = {
-                            navController.navigate(item.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                            scope.launch { drawerState.close() }
-                        },
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                    )
-                }
-            }
-        }
-    ) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(currentTitle) },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(currentTitle) },
+                actions = {
+                    Box {
+                        IconButton(onClick = { expanded = true }) {
                             Icon(Icons.Default.Menu, contentDescription = "Abrir menu")
                         }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            drawerItems.forEach { item ->
+                                DropdownMenuItem(
+                                    text = { Text(item.label) },
+                                    leadingIcon = { Icon(item.icon, contentDescription = null) },
+                                    onClick = {
+                                        navController.navigate(item.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
                     }
-                )
-            }
-        ) { paddingValues ->
-            AppNavHost(navController = navController, paddingValues = paddingValues)
+                }
+            )
         }
+    ) { paddingValues ->
+        AppNavHost(navController = navController, paddingValues = paddingValues)
     }
 }
 
@@ -168,8 +154,8 @@ private fun AppNavHost(
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(Routes.HOME) { HomeScreen() }
-        composable(Routes.EQUIPOS) { Lista("Equipos") }
-        composable(Routes.ACERCA_DE) { AboutScreen() }
+        composable(Routes.EQUIPOS) { PantallaEquipos() }
+        composable(Routes.ACERCA_DE) { PantallaAcercaDe() }
     }
 }
 
@@ -196,10 +182,7 @@ private fun HomeScreen() {
 }
 
 @Composable
-private fun Lista(
-    name: String,
-    modifier: Modifier = Modifier
-) {
+private fun PantallaEquipos(modifier: Modifier = Modifier) {
     val viewModel: TrucoViewModel = viewModel(
         factory = TrucoViewModel.Factory(TeamRepository(RetrofitClient.apiService))
     )
@@ -236,8 +219,6 @@ private fun Lista(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(name, style = MaterialTheme.typography.headlineSmall)
-
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = { viewModel.syncTeams() }) {
                     Icon(Icons.Default.Sync, contentDescription = null)
@@ -415,7 +396,7 @@ private fun TeamDialog(
 
 
 @Composable
-private fun AboutScreen() {
+private fun PantallaAcercaDe() {
     val members = listOf(
         Member(
             name = "Sebastian Andres Deya",
