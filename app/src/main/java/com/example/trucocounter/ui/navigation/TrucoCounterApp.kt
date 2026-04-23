@@ -405,7 +405,7 @@ private fun PantallaAcercaDe() {
             photoResId = R.drawable.valentina
         ),
         Member(
-            name = "Nicolas Llousas",
+            name = "Nicolas Facundo Llousas",
             legajo = "1147795",
             photoResId = R.drawable.nicolas
         ),
