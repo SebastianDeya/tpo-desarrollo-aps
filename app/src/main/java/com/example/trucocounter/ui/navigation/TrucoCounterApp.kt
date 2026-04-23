@@ -231,10 +231,6 @@ private fun PantallaEquipos(modifier: Modifier = Modifier) {
             }
 
 
-            if (teams.isEmpty()) {
-                Text("No hay equipos. Agrega uno con +")
-            }
-
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(teams, key = { it.id }) { team ->
                     TeamRow(
