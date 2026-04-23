@@ -56,12 +56,17 @@ class TeamRepository(
         _teams.postValue(updated)
     }
 
-    fun clearCache() {
-        _teams.postValue(emptyList())
-    }
+    // PUT - reinicia puntos en la API y replica el estado local
+    suspend fun resetAllScores(): Result<Unit> = runCatching {
+        val currentTeams = _teams.value.orEmpty()
+            .filter { it.id.isNotBlank() && it.nombre.isNotBlank() }
 
-    fun resetAllScores() {
-        val reset = _teams.value.orEmpty().map { it.copy(puntos = 0) }
-        _teams.postValue(reset)
+        val updatedTeams = withContext(Dispatchers.IO) {
+            currentTeams.map { team ->
+                apiService.updateEquipo(team.id, team.copy(puntos = 0))
+            }
+        }
+
+        _teams.postValue(updatedTeams)
     }
 }
